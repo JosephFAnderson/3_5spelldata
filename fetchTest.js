@@ -289,27 +289,32 @@ const descriptorData = [
    ["Acid",1],
    ["Air",2],
    ["Blood",3],
-   ["Chaotic",4],
-   ["Cold",5],
-   ["Darkness",6],
-   ["Death",7],
-   ["Earth",8],
-   ["Electricity",9],
-   ["Evil",10],
-   ["Fear",11],
-   ["Fire",12],
-   ["Force",13],
-   ["Good",14],
-   ["Incarnum", 15],
-   ["Language-dependent",16],
-   ["Lawful",17],
-   ["Light",18],
-   ["Luck",19],
-   ["Mind-Affecting",20],
-   ["Sleep",21],
-   ["Sonic",22],
-   ["Teleportation",23],
-   ["Water",24]
+   ["Chaos", 4],
+   ["Chaotic",5],
+   ["Cold",6],
+   ["Darkness",7],
+   ["Death",8],
+   ["Earth",9],
+   ["Ectomancy", 10],
+   ["Electricity",11],
+   ["Evil",12],
+   ["Fear",13],
+   ["Fire",14],
+   ["Force",15],
+   ["Good",16],
+   ["Incarnum", 17],
+   ["Investiture", 18],
+   ["Language-Dependent",19],
+   ["Law",20],
+   ["Lawful",21],
+   ["Light",22],
+   ["Luck",23],
+   ["Mind-Affecting",24],
+   ["Mindset", 25],
+   ["Sleep",26],
+   ["Sonic",27],
+   ["Teleportation",28],
+   ["Water",29]
 ]
 const descriptorMap = new Map();
 descriptorData.forEach( data => descriptorMap.set(data[0], data[1]) );
@@ -382,21 +387,7 @@ const fetchSpell = async url => {
          const taglessElement = element.replace(regex, "").trim();
          const elementArray = taglessElement.split("\n");         
          elementArray.forEach( data => {
-            const schoolTemplate = {
-               school_id: "",
-               spell_id: ""
-            }
-         
-            const subschoolTemplate = {
-               subschool_id: "",
-               spell_id: ""
-            }
-         
-            const descriptorTemplate = {
-               descriptor_id: "",
-               spell_id: ""
-            }
-
+            
             if( data.includes("(") ) {
                data = data.replace("(", "");
                data = data.replace(")", "").trim();
@@ -404,12 +395,22 @@ const fetchSpell = async url => {
                   const dataArray = data.split(",");
 
                   dataArray.forEach( data => {
+                     const subschoolTemplate = {
+                        subschool_id: "",
+                        spell_id: ""
+                     }
+
                      data = data.trim();
                      subschoolTemplate.subschool_id = subschoolMap.get(data); 
                      subschoolTemplate.spell_id = spellID
                      subschoolCSVData.push(subschoolTemplate);
                   })
                } else {
+                  const subschoolTemplate = {
+                     subschool_id: "",
+                     spell_id: ""
+                  }
+
                   subschoolTemplate.subschool_id = subschoolMap.get(data); 
                   subschoolTemplate.spell_id = spellID
                   subschoolCSVData.push(subschoolTemplate);
@@ -422,18 +423,32 @@ const fetchSpell = async url => {
 
                   dataArray.forEach( data => {
                      data = data.trim();
+
+                     const descriptorTemplate = {
+                        descriptor_id: "",
+                        spell_id: ""
+                     }
                      // spellTemplate.descriptor.push( [descriptorMap.get(data), spellID] )
                      descriptorTemplate.descriptor_id = descriptorMap.get(data);
                      descriptorTemplate.spell_id = spellID;
-                     descriptorCSVData.push(descriptorTemplate)
+                     descriptorCSVData.push(descriptorTemplate);
                   })
                } else {
+                  const descriptorTemplate = {
+                     descriptor_id: "",
+                     spell_id: ""
+                  }
+                  
                   descriptorTemplate.descriptor_id = descriptorMap.get(data);
                   descriptorTemplate.spell_id = spellID;
-                  descriptorCSVData.push(descriptorTemplate)
+                  descriptorCSVData.push(descriptorTemplate);               
                }
             } else {
-               // spellTemplate.school.push( [schoolMap.get(data), spellID] )
+               const schoolTemplate = {
+                  school_id: "",
+                  spell_id: ""
+               }
+
                schoolTemplate.school_id = schoolMap.get(data);
                schoolTemplate.spell_id = spellID;
                schoolCSVData.push(schoolTemplate);
